@@ -9,18 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Anek Bangla', sans-serif;
+            margin: 0; padding: 0; font-family: 'Anek Bangla', sans-serif;
             background: linear-gradient(-45deg, #ff9a9e, #fecfef, #ffdde1, #ff758c);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            overflow-x: hidden;
+            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            text-align: center; overflow-x: hidden;
         }
 
         @keyframes gradientBG {
@@ -30,17 +23,12 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            z-index: 10;
+            background: rgba(255, 255, 255, 0.95); padding: 40px 30px; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); max-width: 500px; width: 90%;
+            position: relative; z-index: 10;
         }
 
-        /* Form Styles (Generator Mode) */
+        /* Form Styles */
         #generator-section { display: none; }
         .input-group { margin-bottom: 15px; text-align: left; }
         .input-group label { display: block; color: #ff4757; font-weight: 600; margin-bottom: 5px; }
@@ -54,8 +42,10 @@
             margin-top: 20px; padding: 15px; background: #fff0f2; border-radius: 10px; display: none;
         }
         #generatedLink { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ff4757; border-radius: 5px; }
+        
+        .action-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-        /* Proposal Styles (View Mode) */
+        /* Proposal Styles */
         #proposal-section { display: none; opacity: 0; transform: translateY(30px); }
         .show-proposal { display: block !important; animation: fadeInUp 1.5s forwards; }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
@@ -78,11 +68,14 @@
         .message-text { color: #555; font-size: 18px; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
 
         button {
-            padding: 12px 25px; font-size: 16px; font-family: 'Anek Bangla', sans-serif;
+            padding: 10px 20px; font-size: 15px; font-family: 'Anek Bangla', sans-serif;
             border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;
         }
         .btn-primary { background: #ff4757; color: white; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); width: 100%; margin-top: 10px; }
         .btn-primary:hover { background: #ff2e43; transform: translateY(-2px); }
+        
+        .btn-secondary { background: #555; color: white; flex: 1; }
+        .btn-secondary:hover { background: #333; }
         
         .btn-yes { background: #ff4757; color: white; }
         .btn-wait { background: white; color: #ff4757; border: 2px solid #ff4757; }
@@ -102,21 +95,19 @@
         <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Welcome Screen (Only for Proposal View) -->
     <div id="welcome-screen">
         <h2 style="color: #ff4757; margin-bottom: 30px;">তোমার জন্য একটি সারপ্রাইজ... 💝</h2>
         <button class="btn-primary" style="width: auto;" onclick="openSurprise()">খুলতে ক্লিক করো</button>
     </div>
 
-    <!-- Floating Hearts -->
     <div id="hearts-container"></div>
 
     <div class="container">
         
-        <!-- SECTION 1: GENERATOR FORM (পাবলিক ব্যবহারের জন্য) -->
+        <!-- GENERATOR FORM -->
         <div id="generator-section">
             <h2 class="title">✨ প্রপোজাল লিংক তৈরি করো ✨</h2>
-            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">নিজের মনের কথা লিখে একটি সুন্দর লিংক তৈরি করে তোমার প্রিয় মানুষটিকে পাঠাও।</p>
+            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">নিজের মনের কথা লিখে একটি স্পেশাল লিংক তৈরি করো।</p>
             
             <div class="input-group">
                 <label>পার্টনারের নাম:</label>
@@ -129,7 +120,7 @@
             </div>
 
             <div class="input-group">
-                <label>তোমার মনের কথা (মেসেজ):</label>
+                <label>তোমার মনের কথা:</label>
                 <textarea id="customMessage" rows="4" placeholder="তোমার মনের কথাগুলো এখানে লেখো..."></textarea>
             </div>
 
@@ -146,23 +137,24 @@
             <button class="btn-primary" onclick="generateLink()">ম্যাজিক লিংক তৈরি করো 🪄</button>
 
             <div id="generated-link-box">
-                <label style="color: #ff4757; font-weight: 600; display: block; margin-bottom: 5px;">তোমার স্পেশাল লিংক রেডি!</label>
+                <label style="color: #ff4757; font-weight: 600; display: block; margin-bottom: 5px;">তোমার লিংক রেডি!</label>
                 <input type="text" id="generatedLink" readonly>
-                <button class="btn-primary" onclick="copyLink()">লিংকটি কপি করো</button>
+                
+                <div class="action-buttons">
+                    <button class="btn-primary" style="flex: 1; margin-top: 0;" onclick="copyLink()">কপি করো</button>
+                    <button id="shortenBtn" class="btn-secondary" onclick="shortenLink()">শর্ট করো</button>
+                </div>
             </div>
         </div>
 
-
-        <!-- SECTION 2: PROPOSAL VIEW (যাকে পাঠানো হবে সে এটি দেখবে) -->
+        <!-- PROPOSAL VIEW -->
         <div id="proposal-section">
             <div class="image-container">
                 <img id="displayImage" src="https://images.unsplash.com/photo-1518199266791-5375a83164ba?w=500&q=80" alt="Romantic">
             </div>
 
             <h1>প্রিয় <span id="displayPartner"></span>,</h1>
-            
             <div class="message-text" id="displayMessage"></div>
-            
             <p style="font-weight: 600; color: #ff4757; margin-top: 15px;">ইতি,<br><span id="displayYourName"></span></p>
 
             <div class="buttons">
@@ -174,41 +166,28 @@
     </div>
 
     <script>
-        // URL থেকে ডেটা পড়ার ফাংশন
         const urlParams = new URLSearchParams(window.location.search);
         
-        // চেক করা হচ্ছে লিংকে কোনো ডেটা আছে কি না
         if (urlParams.has('to') && urlParams.has('msg')) {
-            // যদি লিংকে ডেটা থাকে, তার মানে কেউ লিংকটি ওপেন করেছে (Proposal View)
             document.getElementById('welcome-screen').style.display = 'flex';
-            
             document.getElementById('displayPartner').innerText = urlParams.get('to');
             document.getElementById('displayYourName').innerText = urlParams.get('from');
             document.getElementById('displayMessage').innerText = urlParams.get('msg');
-            
             const imgUrl = urlParams.get('img');
-            if(imgUrl) {
-                document.getElementById('displayImage').src = imgUrl;
-            }
-
+            if(imgUrl) document.getElementById('displayImage').src = imgUrl;
         } else {
-            // যদি লিংকে ডেটা না থাকে, তার মানে সে প্রথমবার ওয়েবসাইটে এসেছে (Generator Mode)
             document.getElementById('generator-section').style.display = 'block';
         }
 
-        // সারপ্রাইজ বক্স খোলার ফাংশন
         function openSurprise() {
             document.getElementById('bgMusic').play().catch(e => console.log("Audio autoplay prevented"));
-            
             const welcomeScreen = document.getElementById('welcome-screen');
             welcomeScreen.style.opacity = '0';
             setTimeout(() => { welcomeScreen.style.display = 'none'; }, 1000);
-
             document.getElementById('proposal-section').classList.add('show-proposal');
             createHearts();
         }
 
-        // লিংক জেনারেট করার ফাংশন
         function generateLink() {
             const partner = document.getElementById('partnerName').value;
             const you = document.getElementById('yourName').value;
@@ -221,35 +200,64 @@
                 return;
             }
 
-            // বর্তমান ওয়েবসাইটের লিংকের সাথে প্যারামিটার যোগ করা
             const baseUrl = window.location.href.split('?')[0];
             const finalUrl = `${baseUrl}?to=${encodeURIComponent(partner)}&from=${encodeURIComponent(you)}&msg=${encodeURIComponent(msg)}&wa=${encodeURIComponent(wa)}&img=${encodeURIComponent(img)}`;
 
             document.getElementById('generatedLink').value = finalUrl;
             document.getElementById('generated-link-box').style.display = 'block';
+            
+            // রিসেট শর্ট বাটন
+            const shortBtn = document.getElementById('shortenBtn');
+            shortBtn.innerText = "শর্ট করো";
+            shortBtn.disabled = false;
         }
 
-        // লিংক কপি করার ফাংশন
+        async function shortenLink() {
+            const longUrl = document.getElementById('generatedLink').value;
+            const shortBtn = document.getElementById('shortenBtn');
+            
+            if (!longUrl || longUrl.length < 50) {
+                alert("লিংকটি ইতিমধ্যেই ছোট আছে বা তৈরি হয়নি!");
+                return;
+            }
+
+            shortBtn.innerText = "অপেক্ষা করুন...";
+            shortBtn.disabled = true;
+
+            try {
+                const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(longUrl)}`);
+                const data = await response.json();
+                
+                if(data.shorturl) {
+                    document.getElementById('generatedLink').value = data.shorturl;
+                    shortBtn.innerText = "ছোট হয়েছে! ✅";
+                } else {
+                    alert("দুঃখিত, কোনো সমস্যার কারণে লিংক ছোট করা যাচ্ছে না। দয়া করে বড় লিংকটিই কপি করুন।");
+                    shortBtn.innerText = "শর্ট করো";
+                    shortBtn.disabled = false;
+                }
+            } catch (error) {
+                alert("ইন্টারনেট সমস্যা বা ব্রাউজার থেকে লিংক ছোট করা যাচ্ছে না। দয়া করে বড় লিংকটি কপি করুন।");
+                shortBtn.innerText = "শর্ট করো";
+                shortBtn.disabled = false;
+            }
+        }
+
         function copyLink() {
             const copyText = document.getElementById('generatedLink');
             copyText.select();
             document.execCommand("copy");
-            alert("লিংক কপি করা হয়েছে! এবার যাকে প্রপোজ করতে চাও তাকে পাঠিয়ে দাও।");
+            alert("লিংক কপি করা হয়েছে! এবার যাকে পাঠাতে চাও তাকে পাঠিয়ে দাও।");
         }
 
-        // হোয়াটসঅ্যাপে রিপ্লাই পাঠানোর ফাংশন
         function sendReply(answer) {
             const waNumber = urlParams.get('wa');
-            let message = "";
-            if(answer === 'yes') {
-                message = "হ্যাঁ, আমি রাজি! ❤️ তোমার প্রপোজালটি আমার খুব ভালো লেগেছে।";
-            } else {
-                message = "আমি তোমার কথাগুলো ভেবে দেখছি, আমাকে একটু সময় দাও। 😊";
-            }
+            let message = answer === 'yes' 
+                ? "হ্যাঁ, আমি রাজি! ❤️ তোমার প্রপোজালটি আমার খুব ভালো লেগেছে।" 
+                : "আমি তোমার কথাগুলো ভেবে দেখছি, আমাকে একটু সময় দাও। 😊";
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // হার্ট অ্যানিমেশন
         function createHearts() {
             const container = document.getElementById('hearts-container');
             for (let i = 0; i < 20; i++) {
