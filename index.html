@@ -134,7 +134,7 @@
 </head>
 <body>
 
-    <!-- মিউজিক ফাইল (অবশ্যই গিটহাবে music.mp3 নামে আপলোড করবেন) -->
+    <!-- মিউজিক ফাইল -->
     <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
@@ -152,7 +152,7 @@
 
     <div class="container">
         
-        <!-- GENERATOR FORM (আপনার লিংক তৈরির জন্য) -->
+        <!-- GENERATOR FORM -->
         <div id="generator-section">
             <h2 class="title">✨ প্রপোজাল লিংক তৈরি করো ✨</h2>
             <p style="color: #666; font-size: 14px; margin-bottom: 20px;">নিজের মনের কথা লিখে একটি স্পেশাল লিংক তৈরি করো।</p>
@@ -195,7 +195,7 @@
             </div>
         </div>
 
-        <!-- PROPOSAL VIEW (যাকে পাঠাবেন সে এটি দেখবে) -->
+        <!-- PROPOSAL VIEW -->
         <div id="proposal-section">
             <div class="image-container">
                 <img id="displayImage" src="https://images.unsplash.com/photo-1518199266791-5375a83164ba?w=500&q=80" alt="Romantic">
@@ -216,7 +216,6 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         
-        // চেক করা হচ্ছে লিংকে ডেটা আছে কি না
         if (urlParams.has('to') && urlParams.has('msg')) {
             document.getElementById('welcome-screen').style.display = 'flex';
             document.getElementById('displayPartner').innerText = urlParams.get('to');
@@ -229,25 +228,19 @@
             document.body.style.overflowY = 'auto';
         }
 
-        // --- অ্যানিমেশন ফাংশন ---
         function startSurprise(event) {
-            // ১. মিউজিক প্লে করা
             document.getElementById('bgMusic').play().catch(e => console.log("Audio autoplay prevented"));
             
-            // ২. গিফট বক্স গায়েব করা
             document.getElementById('giftIcon').style.display = 'none';
             document.getElementById('tapText').style.display = 'none';
 
-            // ক্লিক করা জায়গায় প্রথম ফায়ারওয়ার্কস
             createExplosion(event.clientX, event.clientY);
 
-            // ৩. স্ক্রিন জুড়ে বাজি ফাটার মতো একাধিক অ্যানিমেশন
             setTimeout(() => createExplosion(window.innerWidth * 0.2, window.innerHeight * 0.3), 400);
             setTimeout(() => createExplosion(window.innerWidth * 0.8, window.innerHeight * 0.6), 800);
             setTimeout(() => createExplosion(window.innerWidth * 0.5, window.innerHeight * 0.2), 1200);
             setTimeout(() => createExplosion(window.innerWidth * 0.3, window.innerHeight * 0.8), 1600);
 
-            // ৪. অ্যানিমেশনের পর আসল পেজ আনা
             setTimeout(() => {
                 const welcomeScreen = document.getElementById('welcome-screen');
                 welcomeScreen.style.opacity = '0';
@@ -255,10 +248,9 @@
                 
                 document.getElementById('proposal-section').classList.add('show-proposal');
                 createHeartsBackground();
-            }, 2500); // আড়াই সেকেন্ড পর পেজ খুলবে
+            }, 2500); 
         }
 
-        // ইমোজি ফায়ারওয়ার্কস ফাংশন
         function createExplosion(x, y) {
             const emojis = ['❤️', '💋', '💖', '🥰', '😍', '✨', '🎉', '🌹'];
             const container = document.getElementById('welcome-screen');
@@ -270,7 +262,6 @@
                 el.style.left = x + 'px';
                 el.style.top = y + 'px';
                 
-                // ইমোজি ছিটকে পড়ার র্যান্ডম অ্যাঙ্গেল ও দূরত্ব
                 let angle = Math.random() * Math.PI * 2;
                 let distance = Math.random() * (window.innerWidth / 1.5) + 50; 
                 let tx = Math.cos(angle) * distance;
@@ -280,12 +271,10 @@
                 el.style.setProperty('--ty', ty + 'px');
                 container.appendChild(el);
                 
-                // অ্যানিমেশন শেষ হলে রিমুভ করা
                 setTimeout(() => el.remove(), 1200);
             }
         }
 
-        // ব্যাকগ্রাউন্ডের ভাসমান হার্টস
         function createHeartsBackground() {
             const container = document.getElementById('hearts-container');
             for (let i = 0; i < 20; i++) {
@@ -300,7 +289,6 @@
             }
         }
 
-        // --- লিংক জেনারেটর ফাংশন ---
         function generateLink() {
             const partner = document.getElementById('partnerName').value;
             const you = document.getElementById('yourName').value;
@@ -324,29 +312,36 @@
             shortBtn.disabled = false;
         }
 
+        // আপডেট করা লিংক শর্ট করার ফাংশন
         async function shortenLink() {
             const longUrl = document.getElementById('generatedLink').value;
             const shortBtn = document.getElementById('shortenBtn');
             
-            if (!longUrl || longUrl.length < 50) { alert("লিংকটি ইতিমধ্যেই ছোট আছে বা তৈরি হয়নি!"); return; }
+            if (!longUrl || longUrl.length < 50) { 
+                alert("লিংকটি ইতিমধ্যেই ছোট আছে বা তৈরি হয়নি!"); 
+                return; 
+            }
 
             shortBtn.innerText = "অপেক্ষা করুন...";
             shortBtn.disabled = true;
 
             try {
-                const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(longUrl)}`);
+                const apiUrl = `https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+                
+                const response = await fetch(proxyUrl);
                 const data = await response.json();
                 
-                if(data.shorturl) {
-                    document.getElementById('generatedLink').value = data.shorturl;
+                if(data.contents && data.contents.includes("tinyurl.com")) {
+                    document.getElementById('generatedLink').value = data.contents;
                     shortBtn.innerText = "ছোট হয়েছে! ✅";
                 } else {
-                    alert("দুঃখিত, লিংক ছোট করা যাচ্ছে না। দয়া করে বড় লিংকটিই কপি করুন।");
-                    shortBtn.innerText = "শর্ট করো"; shortBtn.disabled = false;
+                    throw new Error("Failed");
                 }
             } catch (error) {
-                alert("ইন্টারনেট সমস্যা। দয়া করে বড় লিংকটি কপি করুন।");
-                shortBtn.innerText = "শর্ট করো"; shortBtn.disabled = false;
+                alert("দুঃখিত, কোনো টেকনিক্যাল কারণে সরাসরি লিংক ছোট করা যাচ্ছে না। দয়া করে বড় লিংকটিই কপি করে পাঠিয়ে দিন।");
+                shortBtn.innerText = "শর্ট করো"; 
+                shortBtn.disabled = false;
             }
         }
 
@@ -366,4 +361,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
