@@ -13,7 +13,7 @@
             background: linear-gradient(-45deg, #ff9a9e, #fecfef, #ffdde1, #ff758c);
             background-size: 400% 400%; animation: gradientBG 15s ease infinite;
             min-height: 100vh; display: flex; justify-content: center; align-items: center;
-            text-align: center; overflow-x: hidden;
+            text-align: center; overflow-x: hidden; overflow-y: hidden;
         }
 
         @keyframes gradientBG {
@@ -25,10 +25,10 @@
         .container {
             background: rgba(255, 255, 255, 0.95); padding: 40px 30px; border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); max-width: 500px; width: 90%;
-            position: relative; z-index: 10;
+            position: relative; z-index: 10; max-height: 90vh; overflow-y: auto;
         }
 
-        /* Form Styles */
+        /* --- Generator Section --- */
         #generator-section { display: none; }
         .input-group { margin-bottom: 15px; text-align: left; }
         .input-group label { display: block; color: #ff4757; font-weight: 600; margin-bottom: 5px; }
@@ -42,20 +42,65 @@
             margin-top: 20px; padding: 15px; background: #fff0f2; border-radius: 10px; display: none;
         }
         #generatedLink { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ff4757; border-radius: 5px; }
-        
         .action-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-        /* Proposal Styles */
-        #proposal-section { display: none; opacity: 0; transform: translateY(30px); }
-        .show-proposal { display: block !important; animation: fadeInUp 1.5s forwards; }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
+        /* --- Welcome Screen & Gift Box --- */
         #welcome-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 100; transition: opacity 1s ease; display: none;
         }
+
+        .gift-box-container {
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .gift-box-container:hover { transform: scale(1.1); }
+        
+        .gift-icon {
+            font-size: 120px;
+            line-height: 1;
+            animation: shake 1.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+            20%, 40%, 60%, 80% { transform: rotate(10deg); }
+        }
+
+        .tap-text {
+            color: #ff4757; font-size: 24px; font-weight: 800; margin-top: 20px;
+            animation: pulseText 1.5s infinite; text-shadow: 0px 2px 5px rgba(255,71,87,0.3);
+        }
+
+        @keyframes pulseText {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        /* --- Fireworks Emojis --- */
+        .firework-emoji {
+            position: fixed;
+            font-size: 28px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: shoot 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes shoot {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5); opacity: 0; }
+        }
+
+        /* --- Proposal View Styles --- */
+        #proposal-section { display: none; opacity: 0; transform: translateY(30px); }
+        .show-proposal { display: block !important; animation: fadeInUp 1.5s forwards; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
         .image-container {
             width: 150px; height: 150px; margin: 0 auto 20px auto; border-radius: 50%;
@@ -73,7 +118,6 @@
         }
         .btn-primary { background: #ff4757; color: white; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); width: 100%; margin-top: 10px; }
         .btn-primary:hover { background: #ff2e43; transform: translateY(-2px); }
-        
         .btn-secondary { background: #555; color: white; flex: 1; }
         .btn-secondary:hover { background: #333; }
         
@@ -81,7 +125,7 @@
         .btn-wait { background: white; color: #ff4757; border: 2px solid #ff4757; }
         .buttons { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
 
-        .heart { position: absolute; color: #ff4757; opacity: 0; z-index: 1; animation: float 4s linear infinite; }
+        .heart { position: absolute; color: #ff4757; opacity: 0; z-index: 1; animation: float 4s linear infinite; pointer-events: none; }
         @keyframes float {
             0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
             100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
@@ -90,22 +134,25 @@
 </head>
 <body>
 
-    <!-- Audio Element -->
+    <!-- মিউজিক ফাইল (অবশ্যই গিটহাবে music.mp3 নামে আপলোড করবেন) -->
     <audio id="bgMusic" loop>
-        <!-- বাইরের লিংকের বদলে আপনার গিটহাবের ফাইলের নাম দিন -->
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- Welcome Screen with Animated Gift Box -->
     <div id="welcome-screen">
-        <h2 style="color: #ff4757; margin-bottom: 30px;">তোমার জন্য একটি সারপ্রাইজ... 💝</h2>
-        <button class="btn-primary" style="width: auto;" onclick="openSurprise()">খুলতে ক্লিক করো</button>
+        <div class="gift-box-container" onclick="startSurprise(event)">
+            <div class="gift-icon" id="giftIcon">🎁</div>
+            <div class="tap-text" id="tapText">সারপ্রাইজ খুলতে ট্যাপ করো!</div>
+        </div>
     </div>
 
+    <!-- Floating Hearts -->
     <div id="hearts-container"></div>
 
     <div class="container">
         
-        <!-- GENERATOR FORM -->
+        <!-- GENERATOR FORM (আপনার লিংক তৈরির জন্য) -->
         <div id="generator-section">
             <h2 class="title">✨ প্রপোজাল লিংক তৈরি করো ✨</h2>
             <p style="color: #666; font-size: 14px; margin-bottom: 20px;">নিজের মনের কথা লিখে একটি স্পেশাল লিংক তৈরি করো।</p>
@@ -148,10 +195,10 @@
             </div>
         </div>
 
-        <!-- PROPOSAL VIEW -->
+        <!-- PROPOSAL VIEW (যাকে পাঠাবেন সে এটি দেখবে) -->
         <div id="proposal-section">
             <div class="image-container">
-                <img id="displayImage" src="photo.jpg" alt="Romantic">
+                <img id="displayImage" src="https://images.unsplash.com/photo-1518199266791-5375a83164ba?w=500&q=80" alt="Romantic">
             </div>
 
             <h1>প্রিয় <span id="displayPartner"></span>,</h1>
@@ -169,6 +216,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         
+        // চেক করা হচ্ছে লিংকে ডেটা আছে কি না
         if (urlParams.has('to') && urlParams.has('msg')) {
             document.getElementById('welcome-screen').style.display = 'flex';
             document.getElementById('displayPartner').innerText = urlParams.get('to');
@@ -178,17 +226,81 @@
             if(imgUrl) document.getElementById('displayImage').src = imgUrl;
         } else {
             document.getElementById('generator-section').style.display = 'block';
+            document.body.style.overflowY = 'auto';
         }
 
-        function openSurprise() {
+        // --- অ্যানিমেশন ফাংশন ---
+        function startSurprise(event) {
+            // ১. মিউজিক প্লে করা
             document.getElementById('bgMusic').play().catch(e => console.log("Audio autoplay prevented"));
-            const welcomeScreen = document.getElementById('welcome-screen');
-            welcomeScreen.style.opacity = '0';
-            setTimeout(() => { welcomeScreen.style.display = 'none'; }, 1000);
-            document.getElementById('proposal-section').classList.add('show-proposal');
-            createHearts();
+            
+            // ২. গিফট বক্স গায়েব করা
+            document.getElementById('giftIcon').style.display = 'none';
+            document.getElementById('tapText').style.display = 'none';
+
+            // ক্লিক করা জায়গায় প্রথম ফায়ারওয়ার্কস
+            createExplosion(event.clientX, event.clientY);
+
+            // ৩. স্ক্রিন জুড়ে বাজি ফাটার মতো একাধিক অ্যানিমেশন
+            setTimeout(() => createExplosion(window.innerWidth * 0.2, window.innerHeight * 0.3), 400);
+            setTimeout(() => createExplosion(window.innerWidth * 0.8, window.innerHeight * 0.6), 800);
+            setTimeout(() => createExplosion(window.innerWidth * 0.5, window.innerHeight * 0.2), 1200);
+            setTimeout(() => createExplosion(window.innerWidth * 0.3, window.innerHeight * 0.8), 1600);
+
+            // ৪. অ্যানিমেশনের পর আসল পেজ আনা
+            setTimeout(() => {
+                const welcomeScreen = document.getElementById('welcome-screen');
+                welcomeScreen.style.opacity = '0';
+                setTimeout(() => { welcomeScreen.style.display = 'none'; document.body.style.overflowY = 'auto'; }, 1000);
+                
+                document.getElementById('proposal-section').classList.add('show-proposal');
+                createHeartsBackground();
+            }, 2500); // আড়াই সেকেন্ড পর পেজ খুলবে
         }
 
+        // ইমোজি ফায়ারওয়ার্কস ফাংশন
+        function createExplosion(x, y) {
+            const emojis = ['❤️', '💋', '💖', '🥰', '😍', '✨', '🎉', '🌹'];
+            const container = document.getElementById('welcome-screen');
+            
+            for(let i = 0; i < 40; i++) {
+                let el = document.createElement('div');
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.className = 'firework-emoji';
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+                
+                // ইমোজি ছিটকে পড়ার র্যান্ডম অ্যাঙ্গেল ও দূরত্ব
+                let angle = Math.random() * Math.PI * 2;
+                let distance = Math.random() * (window.innerWidth / 1.5) + 50; 
+                let tx = Math.cos(angle) * distance;
+                let ty = Math.sin(angle) * distance + (Math.random() * 100); 
+                
+                el.style.setProperty('--tx', tx + 'px');
+                el.style.setProperty('--ty', ty + 'px');
+                container.appendChild(el);
+                
+                // অ্যানিমেশন শেষ হলে রিমুভ করা
+                setTimeout(() => el.remove(), 1200);
+            }
+        }
+
+        // ব্যাকগ্রাউন্ডের ভাসমান হার্টস
+        function createHeartsBackground() {
+            const container = document.getElementById('hearts-container');
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                container.appendChild(heart);
+            }
+        }
+
+        // --- লিংক জেনারেটর ফাংশন ---
         function generateLink() {
             const partner = document.getElementById('partnerName').value;
             const you = document.getElementById('yourName').value;
@@ -207,7 +319,6 @@
             document.getElementById('generatedLink').value = finalUrl;
             document.getElementById('generated-link-box').style.display = 'block';
             
-            // রিসেট শর্ট বাটন
             const shortBtn = document.getElementById('shortenBtn');
             shortBtn.innerText = "শর্ট করো";
             shortBtn.disabled = false;
@@ -217,10 +328,7 @@
             const longUrl = document.getElementById('generatedLink').value;
             const shortBtn = document.getElementById('shortenBtn');
             
-            if (!longUrl || longUrl.length < 50) {
-                alert("লিংকটি ইতিমধ্যেই ছোট আছে বা তৈরি হয়নি!");
-                return;
-            }
+            if (!longUrl || longUrl.length < 50) { alert("লিংকটি ইতিমধ্যেই ছোট আছে বা তৈরি হয়নি!"); return; }
 
             shortBtn.innerText = "অপেক্ষা করুন...";
             shortBtn.disabled = true;
@@ -233,14 +341,12 @@
                     document.getElementById('generatedLink').value = data.shorturl;
                     shortBtn.innerText = "ছোট হয়েছে! ✅";
                 } else {
-                    alert("দুঃখিত, কোনো সমস্যার কারণে লিংক ছোট করা যাচ্ছে না। দয়া করে বড় লিংকটিই কপি করুন।");
-                    shortBtn.innerText = "শর্ট করো";
-                    shortBtn.disabled = false;
+                    alert("দুঃখিত, লিংক ছোট করা যাচ্ছে না। দয়া করে বড় লিংকটিই কপি করুন।");
+                    shortBtn.innerText = "শর্ট করো"; shortBtn.disabled = false;
                 }
             } catch (error) {
-                alert("ইন্টারনেট সমস্যা বা ব্রাউজার থেকে লিংক ছোট করা যাচ্ছে না। দয়া করে বড় লিংকটি কপি করুন।");
-                shortBtn.innerText = "শর্ট করো";
-                shortBtn.disabled = false;
+                alert("ইন্টারনেট সমস্যা। দয়া করে বড় লিংকটি কপি করুন।");
+                shortBtn.innerText = "শর্ট করো"; shortBtn.disabled = false;
             }
         }
 
@@ -257,20 +363,6 @@
                 ? "হ্যাঁ, আমি রাজি! ❤️ তোমার প্রপোজালটি আমার খুব ভালো লেগেছে।" 
                 : "আমি তোমার কথাগুলো ভেবে দেখছি, আমাকে একটু সময় দাও। 😊";
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
-        }
-
-        function createHearts() {
-            const container = document.getElementById('hearts-container');
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.classList.add('heart');
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                container.appendChild(heart);
-            }
         }
     </script>
 </body>
